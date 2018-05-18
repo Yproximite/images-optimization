@@ -1,3 +1,3 @@
 {
-  "cjpeg_binary": "/opt/mozjpeg/bin/cjpeg"
+  "cjpeg_binary": "/usr/bin/mozjpeg"
 }
