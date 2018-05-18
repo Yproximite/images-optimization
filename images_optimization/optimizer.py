@@ -21,8 +21,8 @@ def optimize_images_from_directory(directory):
 
 
 def optimize_jpeg(filename):
-    logger.info('Optimizing %s with mozjpeg...' % filename)
+    logger.info('Optimizing « %s » with mozjpeg...' % filename)
 
 
 def optimize_non_jpeg_image(filename):
-    logger.info('Optimizing %s with Pillow...' % filename)
+    logger.info('Optimizing « %s » with Pillow...' % filename)

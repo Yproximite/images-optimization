@@ -5,9 +5,10 @@ import coloredlogs
 from images_optimization.config import root_path
 
 logger = logging.getLogger('images_optimization')
+formatter = '%(asctime)s - %(levelname)s - %(message)s';
 
 fh = logging.FileHandler('%s/%s' % (root_path, 'output.log'))
-fh.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+fh.setFormatter(logging.Formatter(formatter))
 logger.addHandler(fh)
 
-coloredlogs.install()
+coloredlogs.install(fmt=formatter)
