@@ -1,13 +1,9 @@
 #!/usr/bin/env python
 
-import logging
 import subprocess
 
-import coloredlogs
-
 from images_optimization import mozjpeg
-
-coloredlogs.install()
+from images_optimization.logger import logger
 
 
 def run():
@@ -17,9 +13,9 @@ def run():
 def _check_mozjpeg_binary():
     try:
         mozjpeg.check_binary()
-        logging.info('mozjpeg binary found.')
+        logger.info('mozjpeg binary found.')
     except subprocess.CalledProcessError as e:
-        logging.error('mozjpeg binary not found.')
+        logger.error('mozjpeg binary not found.')
         exit(1)
 
 
