@@ -15,19 +15,23 @@ max_image_height = 3000
 
 def optimize_images_from_directory(directory):
     for filename in glob.iglob('%s/*.*' % directory, recursive=True):
-        filename_lower = filename.lower()
-        is_image = any([filename_lower.endswith('.%s' % extension) for extension in extensions])
-        is_jpg = any([filename_lower.endswith('.%s' % jpg_extension) for jpg_extension in jpg_extensions])
-
-        if is_jpg:
-            optimize_jpeg(filename)
-        elif is_image:
-            optimize_non_jpeg_image(filename)
-        else:
-            pass  # skip non-images
+        _optimize_image(filename)
 
 
-def optimize_jpeg(filename):
+def _optimize_image(filename):
+    filename_lower = filename.lower()
+    is_image = any([filename_lower.endswith('.%s' % extension) for extension in extensions])
+    is_jpg = any([filename_lower.endswith('.%s' % jpg_extension) for jpg_extension in jpg_extensions])
+
+    if is_jpg:
+        _optimize_jpeg(filename)
+    elif is_image:
+        _optimize_non_jpeg_image(filename)
+    else:
+        pass  # skip non-images
+
+
+def _optimize_jpeg(filename):
     logger.info('Optimizing « %s » with mozjpeg...' % filename)
 
     try:
@@ -37,7 +41,7 @@ def optimize_jpeg(filename):
         logger.exception('An error occurred during optimization with mozjpeg')
 
 
-def optimize_non_jpeg_image(filename):
+def _optimize_non_jpeg_image(filename):
     logger.info('Optimizing « %s » with Pillow...' % filename)
 
     try:
