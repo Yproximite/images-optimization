@@ -2,7 +2,9 @@ import glob
 
 from PIL import Image
 
+from images_optimization import mozjpeg
 from images_optimization.logger import logger
+from images_optimization.permissions_fixer import fix_permissions
 
 jpg_extensions = ['jpg', 'jpeg']
 extensions = jpg_extensions + ['png', 'gif']
@@ -28,6 +30,12 @@ def optimize_images_from_directory(directory):
 def optimize_jpeg(filename):
     logger.info('Optimizing « %s » with mozjpeg...' % filename)
 
+    try:
+        mozjpeg.optimize(filename)
+        fix_permissions(filename)
+    except Exception:
+        logger.exception('An error occurred during optimization with mozjpeg')
+
 
 def optimize_non_jpeg_image(filename):
     logger.info('Optimizing « %s » with Pillow...' % filename)
@@ -36,5 +44,6 @@ def optimize_non_jpeg_image(filename):
         image = Image.open(filename)
         image.thumbnail((max_image_width, max_image_height), Image.ANTIALIAS)
         image.save(filename, quality=80, optimize=True)
+        fix_permissions(filename)
     except Exception:
         logger.exception('An error occurred during optimization with Pillow')
