@@ -1,9 +1,11 @@
+import os
 import glob
 
 from PIL import Image
 
 from images_optimization import mozjpeg
 from images_optimization.logger import logger
+from images_optimization.args_parser import parse_args
 from images_optimization.permissions_fixer import fix_permissions
 
 jpg_extensions = ['jpg', 'jpeg']
@@ -14,8 +16,29 @@ max_image_height = 3000
 
 
 def optimize_images_from_directory(directory):
-    for filename in glob.iglob('%s/*.*' % directory, recursive=True):
+    for filename in _list_filenames(directory):
         _optimize_image(filename)
+
+
+def _list_filenames(directory):
+    logger.info('Listing files...')
+
+    filenames = glob.glob('%s/*.*' % directory, recursive=True)
+    filenames = sorted(filenames)
+
+    after_filename = parse_args().after
+
+    if after_filename:
+        after_filename = '%s/%s' % (directory, after_filename)
+
+        try:
+            after_filename_position = filenames.index(after_filename)
+            filenames = filenames[after_filename_position + 1:]
+        except ValueError:
+            logger.error('Filename « %s » do not exists.' % after_filename)
+            exit(1)
+
+    return filenames
 
 
 def _optimize_image(filename):
