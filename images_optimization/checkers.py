@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from images_optimization import mozjpeg
+from images_optimization.optimizers import mozjpeg
 from images_optimization.logger import logger
 
 
