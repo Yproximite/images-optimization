@@ -1,5 +1,7 @@
 # Images Optimization
 
+[![Build Status](https://travis-ci.com/Yproximite/images-optimization.svg?branch=master)](https://travis-ci.com/Yproximite/images-optimization)
+
 > Script Python dogmatique servant à réduire de manière massive le poids des images.
 
 ![](screenshots/cli.png)
