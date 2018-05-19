@@ -10,8 +10,29 @@ extensions = jpg_extensions + ['png', 'gif']
 
 
 def optimize_images_from_directory(directory):
-    for filename in _list_filenames(directory):
-        _optimize_image(filename)
+    handled_images = 0
+    handled_images_success = 0
+    handled_images_errors = 0
+
+    filenames = _list_filenames(directory)
+    filenames_len = len(filenames)
+
+    for filename in filenames:
+        handled_images += 1
+
+        try:
+            _optimize_image(filename)
+            handled_images_success += 1
+        except Exception:
+            logger.exception('An error occurred during optimization')
+            handled_images_errors += 1
+
+        logger.info('Handled %d images on %d, with %d success and %d fails' % (
+            handled_images,
+            filenames_len,
+            handled_images_success,
+            handled_images_errors
+        ))
 
 
 def _list_filenames(directory):
@@ -51,18 +72,12 @@ def _optimize_image(filename):
 def _optimize_jpeg(filename):
     logger.info('Optimizing « %s » with mozjpeg...' % filename)
 
-    try:
-        mozjpeg.optimize(filename)
-        fix_permissions(filename)
-    except Exception:
-        logger.exception('An error occurred during optimization with mozjpeg')
+    mozjpeg.optimize(filename)
+    fix_permissions(filename)
 
 
 def _optimize_non_jpeg_image(filename):
     logger.info('Optimizing « %s » with Pillow...' % filename)
 
-    try:
-        pillow.optimize(filename)
-        fix_permissions(filename)
-    except Exception:
-        logger.exception('An error occurred during optimization with Pillow')
+    pillow.optimize(filename)
+    fix_permissions(filename)
